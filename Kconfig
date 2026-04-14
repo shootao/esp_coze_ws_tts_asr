@@ -1,0 +1,10 @@
+menu "ESP Coze WS TTS ASR"
+
+config ESP_COZE_WS_TTS_ASR_ENABLE_DEBUG_LOG
+    bool "Enable debug payload log"
+    default n
+    help
+      Print all Coze websocket uplink and downlink JSON payloads after
+      sanitizing large voice content fields.
+
+endmenu

@@ -1,0 +1,16 @@
+idf_component_register(
+    SRCS
+        "main.c"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        console
+        esp_event
+        esp_codec_dev
+        esp_netif
+        esp_driver_uart
+        esp32_s3_korvo_2
+        protocol_examples_common
+        nvs_flash
+        esp_coze_ws_tts_asr
+)

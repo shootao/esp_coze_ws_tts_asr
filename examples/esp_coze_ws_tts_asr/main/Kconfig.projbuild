@@ -1,0 +1,150 @@
+menu "ESP Coze WS TTS ASR Example Configuration"
+
+config COZE_WS_BASE_URL
+    string "WebSocket Base URL"
+    default "wss://ws.coze.cn/v1/chat"
+
+config COZE_WS_CONV_CREATE_URL
+    string "Conversation Create URL"
+    default "https://api.coze.cn/v1/conversation/create"
+
+config COZE_WS_BOT_ID
+    string "Coze Bot ID"
+    default ""
+
+config COZE_WS_ACCESS_TOKEN
+    string "Coze Access Token"
+    default ""
+
+config COZE_WS_USER_ID
+    string "Coze User ID"
+    default "esp32_user"
+
+config COZE_WS_ENABLE_ASR
+    bool "Enable ASR"
+    default y
+
+config COZE_WS_ENABLE_TTS
+    bool "Enable TTS"
+    default y
+
+config COZE_WS_VOICE_ID
+    string "Coze Voice ID"
+    depends on COZE_WS_ENABLE_TTS
+    default "7426720361733144585"
+
+config COZE_WS_ENABLE_SUBTITLE
+    bool "Enable subtitle callback"
+    default y
+
+config COZE_WS_AUTO_PLAY_TTS
+    bool "Auto play received TTS audio"
+    depends on COZE_WS_ENABLE_TTS
+    default y
+    help
+      When enabled and TTS downlink codec is PCM, received audio is written to
+      the Korvo-2 speaker automatically. All received audio chunks are still
+      exposed through tts.audio_cb when the callback is configured.
+
+choice COZE_WS_UPLINK_CODEC
+    prompt "ASR uplink codec"
+    depends on COZE_WS_ENABLE_ASR
+    default COZE_WS_UPLINK_CODEC_PCM
+
+config COZE_WS_UPLINK_CODEC_PCM
+    bool "PCM"
+
+config COZE_WS_UPLINK_CODEC_OPUS
+    bool "OPUS"
+
+config COZE_WS_UPLINK_CODEC_G711A
+    bool "G.711A"
+endchoice
+
+choice COZE_WS_DOWNLINK_CODEC
+    prompt "TTS downlink codec"
+    depends on COZE_WS_ENABLE_TTS
+    default COZE_WS_DOWNLINK_CODEC_PCM
+
+config COZE_WS_DOWNLINK_CODEC_OPUS
+    bool "OPUS"
+
+config COZE_WS_DOWNLINK_CODEC_PCM
+    bool "PCM"
+
+config COZE_WS_DOWNLINK_CODEC_G711A
+    bool "G.711A"
+endchoice
+
+config COZE_WS_UPLINK_SAMPLE_RATE
+    int "ASR uplink sample rate"
+    depends on COZE_WS_ENABLE_ASR
+    default 16000 if COZE_WS_UPLINK_CODEC_PCM || COZE_WS_UPLINK_CODEC_OPUS
+    default 8000 if COZE_WS_UPLINK_CODEC_G711A
+
+config COZE_WS_DOWNLINK_SAMPLE_RATE
+    int "TTS downlink sample rate"
+    depends on COZE_WS_ENABLE_TTS
+    default 16000 if COZE_WS_DOWNLINK_CODEC_PCM || COZE_WS_DOWNLINK_CODEC_OPUS
+    default 8000 if COZE_WS_DOWNLINK_CODEC_G711A
+
+config COZE_WS_UPLINK_FRAME_DURATION_MS
+    int "ASR uplink frame duration (ms)"
+    depends on COZE_WS_ENABLE_ASR
+    default 60
+
+config COZE_WS_UPLINK_BITRATE
+    int "ASR OPUS bitrate"
+    depends on COZE_WS_ENABLE_ASR
+    default 16000
+
+config COZE_WS_DOWNLINK_FRAME_DURATION_MS
+    int "TTS downlink frame duration (ms)"
+    depends on COZE_WS_ENABLE_TTS
+    default 60
+
+config COZE_WS_DOWNLINK_BITRATE
+    int "TTS OPUS bitrate"
+    depends on COZE_WS_ENABLE_TTS
+    default 16000
+
+config COZE_WS_SPEECH_RATE
+    int "TTS speech rate"
+    depends on COZE_WS_ENABLE_TTS
+    default 20
+
+config COZE_WS_OUTPUT_VOLUME
+    int "Codec output volume"
+    depends on COZE_WS_ENABLE_TTS
+    range 0 100
+    default 70
+
+config COZE_WS_INPUT_GAIN
+    int "Codec input gain"
+    depends on COZE_WS_ENABLE_ASR
+    range 0 90
+    default 32
+
+config COZE_WS_ENABLE_SERVER_VAD
+    bool "Enable Coze server VAD"
+    depends on COZE_WS_ENABLE_ASR
+    default y
+
+config COZE_WS_VAD_PREFIX_PADDING_MS
+    int "Server VAD prefix padding (ms)"
+    depends on COZE_WS_ENABLE_ASR
+    default 600
+
+config COZE_WS_VAD_SILENCE_DURATION_MS
+    int "Server VAD silence duration (ms)"
+    depends on COZE_WS_ENABLE_ASR
+    default 500
+
+config COZE_WS_BOOT_TTS_TEXT
+    string "Optional boot text for TTS demo"
+    depends on COZE_WS_ENABLE_TTS
+    default ""
+    help
+      If not empty, the example will send this text once after startup.
+
+endmenu

@@ -1,0 +1,13 @@
+version: "0.1.0"
+description: Coze websocket ASR and TTS component for ESP boards
+url: https://github.com/espressif/esp-adf/tree/master/components/esp_coze_ws_tts_asr
+issues: https://github.com/espressif/esp-adf/issues
+
+dependencies:
+  espressif/esp_websocket_client: ^1.6.1
+
+targets:
+  - esp32s3
+
+examples:
+  - path: examples/esp_coze_ws_tts_asr
